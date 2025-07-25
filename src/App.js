@@ -3,6 +3,8 @@ import Main from "./Main";
 import React, { useEffect, useReducer } from "react";
 import Loader from "./Loader";
 import Error from "./Error";
+import StartScreen from "./StartScreen";
+import Question from "./Question";
 
 const initialState = {
     questions: [],
@@ -22,12 +24,19 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 status: 'error',
             }
+        case 'start':
+            return {
+                ...state,
+                status: 'active',
+            }
         default:
            throw new Error(`Unknown action type ${action.type}`);
     }
 }
 function App() {
-    const [{ questions, status}, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status}, dispatch] = useReducer(reducer, initialState);
+
+  const numberOfQuestions = questions.length;
 
   useEffect(() => {
     fetch('http://localhost:8000/questions')
@@ -42,6 +51,8 @@ function App() {
       <Main>
           {status === 'loading' && <Loader />}
           {status === 'error' && <Error />}
+          {status === 'ready' && <StartScreen numOfQuestions={numberOfQuestions} dispatch={dispatch} />}
+          {status === 'active' && <Question />}
       </Main>
     </div>
   );
