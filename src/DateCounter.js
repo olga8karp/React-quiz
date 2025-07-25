@@ -23,6 +23,12 @@ function reducer(state, action) {
         ...state,
         step: action.payload,
       }
+    case 'reset':
+      return {
+        ...state,
+        count: 0,
+        step: 1,
+      }
     default:
       throw new Error(`Unknown action type: ${action.type}`);
   }
@@ -56,7 +62,7 @@ function DateCounter() {
   };
 
   const reset = function () {
-    dispatch({ type: 'setCount', payload: 0 });
+    dispatch({ type: 'reset' });
   };
 
   return (
