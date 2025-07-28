@@ -80,7 +80,7 @@ function App() {
                   dispatch={dispatch}
                   answer={answer}
               />
-                  <NextButton dispatch={dispatch} answer={answer} />
+                  <NextButton dispatch={dispatch} answer={answer} numQuestions={numberOfQuestions} index={index}/>
               </>)
           }
           {status === 'finished' && <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints}></FinishScreen>}
