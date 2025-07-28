@@ -48,6 +48,11 @@ const reducer = (state = initialState, action) => {
                 index: state.index + 1,
                 answer: null,
             }
+        case 'finish':
+            return {
+                ...state,
+                status: 'finished',
+            }
         default:
            throw new Error(`Unknown action type ${action.type}`);
     }
