@@ -15,6 +15,7 @@ const initialState = {
     index: 0,
     answer: null,
     points: 0,
+    highscore: 0,
 };
 
 const reducer = (state = initialState, action) => {
@@ -52,13 +53,14 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 status: 'finished',
+                highscore: state.points > state.highscore ? state.points : state.highscore,
             }
         default:
            throw new Error(`Unknown action type ${action.type}`);
     }
 }
 function App() {
-  const [{ questions, status, index, answer, points}, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index, answer, points, highscore}, dispatch] = useReducer(reducer, initialState);
 
   const numberOfQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((prev, cur) => prev + cur.points, 0);
@@ -88,7 +90,7 @@ function App() {
                   <NextButton dispatch={dispatch} answer={answer} numQuestions={numberOfQuestions} index={index}/>
               </>)
           }
-          {status === 'finished' && <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints}></FinishScreen>}
+          {status === 'finished' && <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints} highscore={highscore}></FinishScreen>}
       </Main>
     </div>
   );
