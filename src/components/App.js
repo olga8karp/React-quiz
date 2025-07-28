@@ -1,6 +1,6 @@
 import Header from "./Header";
 import Main from "./Main";
-import React, { useEffect, useReducer } from "react";
+import React, {useEffect, useReducer} from "react";
 import Loader from "./Loader";
 import Error from "./Error";
 import StartScreen from "./StartScreen";
@@ -62,44 +62,48 @@ const reducer = (state = initialState, action) => {
                 status: 'ready',
             }
         default:
-           throw new Error(`Unknown action type ${action.type}`);
+            throw new Error(`Unknown action type ${action.type}`);
     }
 }
+
 function App() {
-  const [{ questions, status, index, answer, points, highscore}, dispatch] = useReducer(reducer, initialState);
+    const [{questions, status, index, answer, points, highscore}, dispatch] = useReducer(reducer, initialState);
 
-  const numberOfQuestions = questions.length;
-  const maxPossiblePoints = questions.reduce((prev, cur) => prev + cur.points, 0);
+    const numberOfQuestions = questions.length;
+    const maxPossiblePoints = questions.reduce((prev, cur) => prev + cur.points, 0);
 
-  useEffect(() => {
-    fetch('http://localhost:8000/questions')
-        .then((response) => response.json())
-        .then((data) => dispatch({ type: 'dataReceived', payload: data }))
-        .catch(() => dispatch({ type: 'dataFailed' }));
-  }, []);
-  return (
-    <div className="app">
-      <Header />
+    useEffect(() => {
+        fetch('http://localhost:8000/questions')
+            .then((response) => response.json())
+            .then((data) => dispatch({type: 'dataReceived', payload: data}))
+            .catch(() => dispatch({type: 'dataFailed'}));
+    }, []);
+    return (
+        <div className="app">
+            <Header/>
 
-      <Main>
-          {status === 'loading' && <Loader />}
-          {status === 'error' && <Error />}
-          {status === 'ready' && <StartScreen numOfQuestions={numberOfQuestions} dispatch={dispatch} />}
-          {status === 'active' &&
-              (<>
-              <Progress index={index} numQuestions={numberOfQuestions} points={points} maxPossiblePoints={maxPossiblePoints} answer={answer}/>
-              <Question
-                  question={questions[index]}
-                  dispatch={dispatch}
-                  answer={answer}
-              />
-                  <NextButton dispatch={dispatch} answer={answer} numQuestions={numberOfQuestions} index={index}/>
-              </>)
-          }
-          {status === 'finished' && <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints} highscore={highscore} dispatch={dispatch}></FinishScreen>}
-      </Main>
-    </div>
-  );
+            <Main>
+                {status === 'loading' && <Loader/>}
+                {status === 'error' && <Error/>}
+                {status === 'ready' && <StartScreen numOfQuestions={numberOfQuestions} dispatch={dispatch}/>}
+                {status === 'active' &&
+                    (<>
+                        <Progress index={index} numQuestions={numberOfQuestions} points={points}
+                                  maxPossiblePoints={maxPossiblePoints} answer={answer}/>
+                        <Question
+                            question={questions[index]}
+                            dispatch={dispatch}
+                            answer={answer}
+                        />
+                        <NextButton dispatch={dispatch} answer={answer} numQuestions={numberOfQuestions} index={index}/>
+                    </>)
+                }
+                {status === 'finished' &&
+                    <FinishScreen points={points} maxPossiblePoints={maxPossiblePoints} highscore={highscore}
+                                  dispatch={dispatch}></FinishScreen>}
+            </Main>
+        </div>
+    );
 }
 
 export default App;
