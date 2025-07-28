@@ -5,6 +5,7 @@ import Loader from "./Loader";
 import Error from "./Error";
 import StartScreen from "./StartScreen";
 import Question from "./Question";
+import NextButton from "./NextButton";
 
 const initialState = {
     questions: [],
@@ -39,6 +40,12 @@ const reducer = (state = initialState, action) => {
                 answer: action.payload,
                 points: action.payload === question.correctOption ? state.points + question.points : state.points,
             }
+        case 'nextQuestion':
+            return {
+                ...state,
+                index: state.index + 1,
+                answer: null,
+            }
         default:
            throw new Error(`Unknown action type ${action.type}`);
     }
@@ -62,7 +69,16 @@ function App() {
           {status === 'loading' && <Loader />}
           {status === 'error' && <Error />}
           {status === 'ready' && <StartScreen numOfQuestions={numberOfQuestions} dispatch={dispatch} />}
-          {status === 'active' && <Question question={questions[index]} dispatch={dispatch} answer={answer} />}
+          {status === 'active' &&
+              (<>
+              <Question
+                  question={questions[index]}
+                  dispatch={dispatch}
+                  answer={answer}
+              />
+                  <NextButton dispatch={dispatch} answer={answer} />
+              </>)
+          }
       </Main>
     </div>
   );
