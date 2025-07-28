@@ -10,6 +10,7 @@ const initialState = {
     questions: [],
     status: 'loading',
     index: 0,
+    answer: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -29,6 +30,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 status: 'active',
+            }
+        case 'newAnswer':
+            return {
+                ...state,
+                answer: action.payload,
             }
         default:
            throw new Error(`Unknown action type ${action.type}`);
@@ -53,7 +59,7 @@ function App() {
           {status === 'loading' && <Loader />}
           {status === 'error' && <Error />}
           {status === 'ready' && <StartScreen numOfQuestions={numberOfQuestions} dispatch={dispatch} />}
-          {status === 'active' && <Question question={questions[index]} />}
+          {status === 'active' && <Question question={questions[index]} dispatch={dispatch} answer={answer} />}
       </Main>
     </div>
   );
