@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
     }
 }
 function App() {
-  const [{ questions, status, index}, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index, answer}, dispatch] = useReducer(reducer, initialState);
 
   const numberOfQuestions = questions.length;
 
